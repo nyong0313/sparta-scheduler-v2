@@ -1,4 +1,4 @@
-package org.example.schedulerv2.controller.dto;
+package org.example.schedulerv2.user.controller.dto;
 
 import jakarta.validation.constraints.Email;
 import lombok.Getter;

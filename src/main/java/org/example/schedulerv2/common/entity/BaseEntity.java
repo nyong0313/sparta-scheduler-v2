@@ -1,4 +1,4 @@
-package org.example.schedulerv2.entity;
+package org.example.schedulerv2.common.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

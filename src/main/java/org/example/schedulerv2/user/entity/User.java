@@ -1,4 +1,4 @@
-package org.example.schedulerv2.entity;
+package org.example.schedulerv2.user.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

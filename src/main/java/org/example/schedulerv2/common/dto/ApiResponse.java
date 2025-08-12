@@ -1,4 +1,4 @@
-package org.example.schedulerv2.service.dto;
+package org.example.schedulerv2.common.dto;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

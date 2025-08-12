@@ -1,16 +1,14 @@
-package org.example.schedulerv2.service;
+package org.example.schedulerv2.schedule.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulerv2.controller.dto.ScheduleRequestDto;
-import org.example.schedulerv2.entity.Schedule;
-import org.example.schedulerv2.repository.ScheduleRepository;
-import org.example.schedulerv2.service.dto.ScheduleResponseDto;
+import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
+import org.example.schedulerv2.schedule.entity.Schedule;
+import org.example.schedulerv2.schedule.repository.ScheduleRepository;
+import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

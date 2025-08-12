@@ -1,10 +1,10 @@
-package org.example.schedulerv2.controller;
+package org.example.schedulerv2.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulerv2.controller.dto.UserRequestDto;
-import org.example.schedulerv2.service.UserService;
-import org.example.schedulerv2.service.dto.ApiResponse;
-import org.example.schedulerv2.service.dto.UserResponseDto;
+import org.example.schedulerv2.user.controller.dto.UserRequestDto;
+import org.example.schedulerv2.user.service.UserService;
+import org.example.schedulerv2.common.dto.ApiResponse;
+import org.example.schedulerv2.user.service.dto.UserResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

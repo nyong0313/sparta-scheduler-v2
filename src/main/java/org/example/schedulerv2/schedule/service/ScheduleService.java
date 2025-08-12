@@ -1,7 +1,9 @@
 package org.example.schedulerv2.schedule.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.schedulerv2.schedule.controller.dto.DeleteScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
+import org.example.schedulerv2.schedule.controller.dto.UpdateScheduleRequestDto;
 import org.example.schedulerv2.schedule.entity.Schedule;
 import org.example.schedulerv2.schedule.repository.ScheduleRepository;
 import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
@@ -41,18 +43,23 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, ScheduleRequestDto scheduleRequestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, UpdateScheduleRequestDto updateScheduleRequestDto) {
         Schedule existingSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
+        if(!existingSchedule.getUser().getPassword().equals(updateScheduleRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
 
-        existingSchedule.updateSchedule(scheduleRequestDto.getTitle(), scheduleRequestDto.getContents());
+        existingSchedule.updateSchedule(updateScheduleRequestDto.getTitle(), updateScheduleRequestDto.getContents());
         return ScheduleResponseDto.from(scheduleRepository.save(existingSchedule));
     }
 
     @Transactional
-    public void deleteScheduleById(Long id) {
+    public void deleteScheduleById(Long id, DeleteScheduleRequestDto deleteScheduleRequestDto) {
         Schedule existingSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
+        if(!existingSchedule.getUser().getPassword().equals(deleteScheduleRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+
         scheduleRepository.delete(existingSchedule);
     }
 }

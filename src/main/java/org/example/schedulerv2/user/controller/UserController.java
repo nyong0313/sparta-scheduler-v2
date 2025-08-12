@@ -1,6 +1,7 @@
 package org.example.schedulerv2.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.schedulerv2.user.controller.dto.DeleteUserRequestDto;
 import org.example.schedulerv2.user.controller.dto.UserRequestDto;
 import org.example.schedulerv2.user.service.UserService;
 import org.example.schedulerv2.common.dto.ApiResponse;
@@ -38,8 +39,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    public ApiResponse<UserResponseDto> deleteUser(@PathVariable Long userId) {
-        userService.deleteUserById(userId);
+    public ApiResponse<UserResponseDto> deleteUser(@PathVariable Long userId, @RequestBody DeleteUserRequestDto deleteUserRequestDto) {
+        userService.deleteUserById(userId, deleteUserRequestDto.getPassword());
         return ApiResponse.of(HttpStatus.OK, "유저가 삭제되었습니다. ID: " + userId);
     }
 }

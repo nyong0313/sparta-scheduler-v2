@@ -1,6 +1,7 @@
 package org.example.schedulerv2.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.schedulerv2.user.controller.dto.DeleteUserRequestDto;
 import org.example.schedulerv2.user.controller.dto.UserRequestDto;
 import org.example.schedulerv2.user.entity.User;
 import org.example.schedulerv2.user.repository.UserRepository;
@@ -19,7 +20,7 @@ public class UserService {
 
     @Transactional
     public UserResponseDto saveUser(UserRequestDto userRequestDto) {
-        User user = new User(userRequestDto.getUsername(), userRequestDto.getEmail());
+        User user = new User(userRequestDto.getUsername(), userRequestDto.getEmail(), userRequestDto.getPassword());
         User savedUser = userRepository.save(user);
         return UserResponseDto.from(savedUser);
     }
@@ -43,15 +44,21 @@ public class UserService {
     public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다. id: " + id));
+        if(!existingUser.getPassword().equals(userRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+
         existingUser.updateUser(userRequestDto.getEmail(), userRequestDto.getEmail());
         User savedUser = userRepository.save(existingUser);
         return UserResponseDto.from(savedUser);
     }
 
     @Transactional
-    public void deleteUserById(Long id) {
-        User user = userRepository.findById(id)
+    public void deleteUserById(Long id, DeleteUserRequestDto deleteUserRequestDto) {
+        User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다. id: " + id));
-        userRepository.delete(user);
+        if(!existingUser.getPassword().equals(deleteUserRequestDto.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+
+        userRepository.delete(existingUser);
     }
 }

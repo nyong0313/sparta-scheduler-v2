@@ -1,7 +1,9 @@
 package org.example.schedulerv2.schedule.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.schedulerv2.schedule.controller.dto.DeleteScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
+import org.example.schedulerv2.schedule.controller.dto.UpdateScheduleRequestDto;
 import org.example.schedulerv2.schedule.service.ScheduleService;
 import org.example.schedulerv2.common.dto.ApiResponse;
 import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
@@ -39,13 +41,13 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    public ApiResponse<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return ApiResponse.ok(scheduleService.updateSchedule(scheduleId, scheduleRequestDto));
+    public ApiResponse<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto) {
+        return ApiResponse.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequestDto));
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ApiResponse<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.deleteScheduleById(scheduleId);
+    public ApiResponse<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto) {
+        scheduleService.deleteScheduleById(scheduleId, deleteScheduleRequestDto);
         return ApiResponse.of(HttpStatus.OK, "일정이 삭제되었습니다. ID: " + scheduleId);
     }
 }

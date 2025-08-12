@@ -3,8 +3,6 @@ package org.example.schedulerv2.schedule.controller.dto;
 import lombok.Getter;
 
 @Getter
-public class UpdateScheduleRequestDto {
-    private String title;
-    private String contents;
+public class DeleteScheduleRequestDto {
     private String password;
 }

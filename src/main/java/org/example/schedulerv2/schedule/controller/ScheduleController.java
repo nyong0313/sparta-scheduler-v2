@@ -5,6 +5,8 @@ import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
 import org.example.schedulerv2.schedule.service.ScheduleService;
 import org.example.schedulerv2.common.dto.ApiResponse;
 import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
+import org.example.schedulerv2.user.entity.User;
+import org.example.schedulerv2.user.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +18,14 @@ import java.util.List;
 public class ScheduleController {
 
     private final ScheduleService scheduleService;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ApiResponse<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
-        return ApiResponse.ok(scheduleService.saveSchedule(scheduleRequestDto));
+        Long tempUserId = 1L; // 임시 유저 ID
+        User user = userRepository.findById(tempUserId)
+                .orElseThrow(() -> new IllegalArgumentException("선택한 유저는 존재하지 않습니다. ID: " + tempUserId));
+        return ApiResponse.ok(scheduleService.saveSchedule(scheduleRequestDto, user));
     }
 
     @GetMapping

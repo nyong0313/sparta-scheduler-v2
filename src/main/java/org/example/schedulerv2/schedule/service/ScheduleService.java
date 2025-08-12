@@ -5,6 +5,7 @@ import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
 import org.example.schedulerv2.schedule.entity.Schedule;
 import org.example.schedulerv2.schedule.repository.ScheduleRepository;
 import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
+import org.example.schedulerv2.user.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +18,8 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto) {
-        Schedule schedule = new Schedule(
-                scheduleRequestDto.getWriterName(),
-                scheduleRequestDto.getTitle(),
-                scheduleRequestDto.getContents()
-        );
-
+    public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
+        Schedule schedule = Schedule.of(scheduleRequestDto, user);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return ScheduleResponseDto.from(savedSchedule);
     }

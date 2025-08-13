@@ -17,4 +17,8 @@ public class UserRequestDto {
     @NotBlank(message = "비밀번호는 필수입니다.")
     @Size(min = 8, max = 15, message = "비밀번호는 8자 이상 15자 이하이어야 합니다.")
     private String password;
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

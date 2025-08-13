@@ -1,6 +1,7 @@
 package org.example.schedulerv2.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.schedulerv2.config.PasswordEncoder;
 import org.example.schedulerv2.user.controller.dto.DeleteUserRequestDto;
 import org.example.schedulerv2.user.controller.dto.LoginRequestDto;
 import org.example.schedulerv2.user.controller.dto.UserRequestDto;
@@ -18,18 +19,22 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public void signup(UserRequestDto userRequestDto) {
+        if(userRepository.findByEmail(userRequestDto.getEmail()).isPresent())
+            throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
+
+        userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
         userRepository.save(User.of(userRequestDto));
     }
 
+    @Transactional
     public User login(LoginRequestDto loginRequestDto) {
         User existingUser = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        if (!existingUser.getPassword().equals(loginRequestDto.getPassword())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
+        isPasswordMatch(existingUser, loginRequestDto.getPassword());
 
         return existingUser;
     }
@@ -73,7 +78,7 @@ public class UserService {
 
     @Transactional
     public void isPasswordMatch(User user, String password) {
-        if(!user.getPassword().equals(password))
+        if(!passwordEncoder.matches(password, user.getPassword()))
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 }

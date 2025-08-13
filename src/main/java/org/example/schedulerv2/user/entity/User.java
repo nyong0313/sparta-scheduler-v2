@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schedulerv2.common.entity.BaseEntity;
 import org.example.schedulerv2.schedule.entity.Schedule;
+import org.example.schedulerv2.user.controller.dto.UserRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +32,9 @@ public class User extends BaseEntity {
     public void updateUser(String username, String email) {
         this.username = username;
         this.email = email;
+    }
+
+    public static User of(UserRequestDto userRequestDto) {
+        return new User(userRequestDto.getUsername(), userRequestDto.getEmail(), userRequestDto.getPassword());
     }
 }

@@ -2,6 +2,7 @@ package org.example.schedulerv2.user.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.schedulerv2.user.controller.dto.DeleteUserRequestDto;
 import org.example.schedulerv2.user.controller.dto.LoginRequestDto;
@@ -23,13 +24,13 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ApiResponse<UserResponseDto> signup(@RequestBody UserRequestDto userRequestDto) {
+    public ApiResponse<UserResponseDto> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         userService.signup(userRequestDto);
         return ApiResponse.of(HttpStatus.CREATED, "회원가입 되었습니다.");
     }
 
     @PostMapping("/login")
-    public ApiResponse<UserResponseDto> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
+    public ApiResponse<UserResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         User loginUser = userService.login(loginRequestDto);
         HttpSession session = request.getSession(true);
         session.setAttribute("LOGIN_USER", loginUser.getId());
@@ -55,12 +56,12 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public ApiResponse<UserResponseDto> updateUser(@PathVariable Long userId, @RequestBody UserRequestDto userDto) {
-        return ApiResponse.ok(userService.updateUser(userId, userDto));
+    public ApiResponse<UserResponseDto> updateUser(@PathVariable Long userId, @Valid @RequestBody UserRequestDto userRequestDto) {
+        return ApiResponse.ok(userService.updateUser(userId, userRequestDto));
     }
 
     @DeleteMapping("/{userId}")
-    public ApiResponse<UserResponseDto> deleteUser(@PathVariable Long userId, @RequestBody DeleteUserRequestDto deleteUserRequestDto) {
+    public ApiResponse<UserResponseDto> deleteUser(@PathVariable Long userId, @Valid @RequestBody DeleteUserRequestDto deleteUserRequestDto) {
         userService.deleteUserById(userId, deleteUserRequestDto);
         return ApiResponse.of(HttpStatus.OK, "유저가 삭제되었습니다. ID: " + userId);
     }

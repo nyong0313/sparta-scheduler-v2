@@ -1,6 +1,8 @@
 package org.example.schedulerv2.schedule.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schedulerv2.common.entity.BaseEntity;
@@ -14,7 +16,9 @@ public class Schedule extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false, length = 20)
     private String title;
+    @Column(nullable = false, length = 50)
     private String contents;
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,5 +1,6 @@
 package org.example.schedulerv2.schedule.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.schedulerv2.schedule.controller.dto.DeleteScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
@@ -23,7 +24,7 @@ public class ScheduleController {
     private final UserRepository userRepository;
 
     @PostMapping
-    public ApiResponse<ScheduleResponseDto> saveSchedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
+    public ApiResponse<ScheduleResponseDto> saveSchedule(@Valid @RequestBody ScheduleRequestDto scheduleRequestDto) {
         Long tempUserId = 1L; // 임시 유저 ID
         User user = userRepository.findById(tempUserId)
                 .orElseThrow(() -> new IllegalArgumentException("선택한 유저는 존재하지 않습니다. ID: " + tempUserId));
@@ -41,12 +42,12 @@ public class ScheduleController {
     }
 
     @PutMapping("/{scheduleId}")
-    public ApiResponse<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto) {
+    public ApiResponse<ScheduleResponseDto> updateSchedule(@PathVariable Long scheduleId, @Valid @RequestBody UpdateScheduleRequestDto updateScheduleRequestDto) {
         return ApiResponse.ok(scheduleService.updateSchedule(scheduleId, updateScheduleRequestDto));
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ApiResponse<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId, @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto) {
+    public ApiResponse<ScheduleResponseDto> deleteSchedule(@PathVariable Long scheduleId, @Valid @RequestBody DeleteScheduleRequestDto deleteScheduleRequestDto) {
         scheduleService.deleteScheduleById(scheduleId, deleteScheduleRequestDto);
         return ApiResponse.of(HttpStatus.OK, "일정이 삭제되었습니다. ID: " + scheduleId);
     }

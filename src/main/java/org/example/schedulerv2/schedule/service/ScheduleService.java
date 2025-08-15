@@ -1,7 +1,6 @@
 package org.example.schedulerv2.schedule.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulerv2.schedule.controller.dto.DeleteScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.UpdateScheduleRequestDto;
 import org.example.schedulerv2.schedule.entity.Schedule;
@@ -21,7 +20,7 @@ public class ScheduleService {
 
     @Transactional
     public ScheduleResponseDto saveSchedule(ScheduleRequestDto scheduleRequestDto, User user) {
-        Schedule schedule = Schedule.of(scheduleRequestDto, user);
+        Schedule schedule = Schedule.of(scheduleRequestDto.getTitle(), scheduleRequestDto.getContent(), user);
         Schedule savedSchedule = scheduleRepository.save(schedule);
         return ScheduleResponseDto.from(savedSchedule);
     }
@@ -43,23 +42,24 @@ public class ScheduleService {
     }
 
     @Transactional
-    public ScheduleResponseDto updateSchedule(Long id, UpdateScheduleRequestDto updateScheduleRequestDto) {
+    public ScheduleResponseDto updateSchedule(Long id, User user, UpdateScheduleRequestDto updateScheduleRequestDto) {
         Schedule existingSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
-        if(!existingSchedule.getUser().getPassword().equals(updateScheduleRequestDto.getPassword()))
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        if (!existingSchedule.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
 
         existingSchedule.updateSchedule(updateScheduleRequestDto.getTitle(), updateScheduleRequestDto.getContents());
         return ScheduleResponseDto.from(scheduleRepository.save(existingSchedule));
     }
 
     @Transactional
-    public void deleteScheduleById(Long id, DeleteScheduleRequestDto deleteScheduleRequestDto) {
+    public void deleteScheduleById(Long id, User user) {
         Schedule existingSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("일정을 찾을 수 없습니다. id: " + id));
-        if(!existingSchedule.getUser().getPassword().equals(deleteScheduleRequestDto.getPassword()))
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-
+        if (!existingSchedule.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("작성자만 수정할 수 있습니다.");
+        }
         scheduleRepository.delete(existingSchedule);
     }
 }

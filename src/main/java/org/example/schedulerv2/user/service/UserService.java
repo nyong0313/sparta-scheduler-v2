@@ -27,14 +27,14 @@ public class UserService {
             throw new IllegalArgumentException("이미 존재하는 이메일입니다.");
 
         userRequestDto.setPassword(passwordEncoder.encode(userRequestDto.getPassword()));
-        userRepository.save(User.of(userRequestDto));
+        userRepository.save(User.of(userRequestDto.getUsername(), userRequestDto.getEmail(), userRequestDto.getPassword()));
     }
 
     @Transactional
     public User login(LoginRequestDto loginRequestDto) {
         User existingUser = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-        isPasswordMatch(existingUser, loginRequestDto.getPassword());
+        existingUser.isPasswordMatch(loginRequestDto.getPassword(), passwordEncoder);
 
         return existingUser;
     }
@@ -56,7 +56,7 @@ public class UserService {
     @Transactional
     public UserResponseDto updateUser(Long id, UserRequestDto userRequestDto) {
         User existingUser = findUserById(id);
-        isPasswordMatch(existingUser, userRequestDto.getPassword());
+        existingUser.isPasswordMatch(userRequestDto.getPassword(), passwordEncoder);
 
         existingUser.updateUser(userRequestDto.getEmail(), userRequestDto.getEmail());
         User savedUser = userRepository.save(existingUser);
@@ -66,7 +66,7 @@ public class UserService {
     @Transactional
     public void deleteUserById(Long id, DeleteUserRequestDto deleteUserRequestDto) {
         User existingUser = findUserById(id);
-        isPasswordMatch(existingUser, deleteUserRequestDto.getPassword());
+        existingUser.isPasswordMatch(deleteUserRequestDto.getPassword(), passwordEncoder);
         userRepository.delete(existingUser);
     }
 
@@ -74,11 +74,5 @@ public class UserService {
     public User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다. id: " + id));
-    }
-
-    @Transactional
-    public void isPasswordMatch(User user, String password) {
-        if(!passwordEncoder.matches(password, user.getPassword()))
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 }

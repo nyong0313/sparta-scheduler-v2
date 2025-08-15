@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schedulerv2.common.entity.BaseEntity;
+import org.example.schedulerv2.config.PasswordEncoder;
 import org.example.schedulerv2.schedule.entity.Schedule;
 import org.example.schedulerv2.user.controller.dto.UserRequestDto;
 
@@ -26,8 +27,6 @@ public class User extends BaseEntity {
     private String email;
     @Column(nullable = false)
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Schedule> schedules = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -40,7 +39,12 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public static User of(UserRequestDto userRequestDto) {
-        return new User(userRequestDto.getUsername(), userRequestDto.getEmail(), userRequestDto.getPassword());
+    public static User of(String username, String email, String password) {
+        return new User(username, email, password);
+    }
+
+    public void isPasswordMatch(String password, PasswordEncoder passwordEncoder) {
+        if(!passwordEncoder.matches(password, this.getPassword()))
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 }

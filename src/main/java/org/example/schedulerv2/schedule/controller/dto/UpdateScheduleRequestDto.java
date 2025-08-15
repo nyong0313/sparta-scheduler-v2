@@ -13,6 +13,4 @@ public class UpdateScheduleRequestDto {
     @NotBlank(message = "내용은 필수입니다.")
     @Size(max = 500, message = "내용은 최대 500자까지 가능합니다.")
     private String contents;
-    @NotBlank
-    private String password;
 }

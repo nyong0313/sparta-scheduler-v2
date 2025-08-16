@@ -33,4 +33,5 @@ public class CommentController {
     public ApiResponse<Void> deleteCommentById(@PathVariable Long commentId) {
         commentService.deleteCommentById(commentId);
         return ApiResponse.of(HttpStatus.OK, "댓글이 삭제되었습니다. ID: " + commentId);
+    }
 }

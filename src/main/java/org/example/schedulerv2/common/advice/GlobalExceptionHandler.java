@@ -1,4 +1,4 @@
-package org.example.schedulerv2.config;
+package org.example.schedulerv2.common.advice;
 
 import org.example.schedulerv2.common.dto.ApiResponse;
 import org.springframework.http.HttpStatus;

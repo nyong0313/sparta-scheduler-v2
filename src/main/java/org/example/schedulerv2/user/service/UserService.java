@@ -1,7 +1,7 @@
 package org.example.schedulerv2.user.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.schedulerv2.config.PasswordEncoder;
+import org.example.schedulerv2.common.config.PasswordEncoder;
 import org.example.schedulerv2.user.controller.dto.DeleteUserRequestDto;
 import org.example.schedulerv2.user.controller.dto.LoginRequestDto;
 import org.example.schedulerv2.user.controller.dto.UserRequestDto;

@@ -1,17 +1,10 @@
 package org.example.schedulerv2.user.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.schedulerv2.common.entity.BaseEntity;
-import org.example.schedulerv2.config.PasswordEncoder;
-import org.example.schedulerv2.schedule.entity.Schedule;
-import org.example.schedulerv2.user.controller.dto.UserRequestDto;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.example.schedulerv2.common.config.PasswordEncoder;
 
 @Entity
 @Getter

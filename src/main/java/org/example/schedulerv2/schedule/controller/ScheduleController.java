@@ -11,10 +11,12 @@ import org.example.schedulerv2.schedule.controller.dto.ScheduleRequestDto;
 import org.example.schedulerv2.schedule.controller.dto.UpdateScheduleRequestDto;
 import org.example.schedulerv2.schedule.service.ScheduleService;
 import org.example.schedulerv2.common.dto.ApiResponse;
+import org.example.schedulerv2.schedule.service.dto.SchedulePageResponseDto;
 import org.example.schedulerv2.schedule.service.dto.ScheduleResponseDto;
 import org.example.schedulerv2.user.entity.User;
 import org.example.schedulerv2.user.repository.UserRepository;
 import org.example.schedulerv2.user.service.UserService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,6 +69,14 @@ public class ScheduleController {
     public ApiResponse<CommentResponseDto> saveComment(@PathVariable Long scheduleId, @Valid @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request) {
         User user = getLoginUser(request);
         return ApiResponse.ok(commentService.saveComment(commentRequestDto, user, scheduleId));
+    }
+
+    // 일정 페이지 조회
+    @GetMapping("/pages")
+    public ApiResponse<Page<SchedulePageResponseDto>> getSchedulesByPage(
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        return ApiResponse.ok(scheduleService.findAllPage(page, size));
     }
 
     private User getLoginUser(HttpServletRequest request) {

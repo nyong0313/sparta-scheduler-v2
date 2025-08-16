@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping
+    @PostMapping("/signup")
     public ApiResponse<UserResponseDto> signup(@Valid @RequestBody UserRequestDto userRequestDto) {
         userService.signup(userRequestDto);
         return ApiResponse.of(HttpStatus.CREATED, "회원가입 되었습니다.");

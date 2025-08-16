@@ -15,8 +15,8 @@ public class LoginFilter implements Filter {
     private static final String[] WHITE_LIST = {
             "/",
             "/api/v2/users/signup",
-            "/api/v2/login",
-            "/api/v2/logout"};
+            "/api/v2/users/login",
+            "/api/v2/users/logout"};
 
     @Override
     public void doFilter(
@@ -33,7 +33,7 @@ public class LoginFilter implements Filter {
         if (!isWhiteList(requestURI)) {
             HttpSession session = httpRequest.getSession(false);
 
-            if (session == null || session.getAttribute("sessionKey값") == null) {
+            if (session == null || session.getAttribute("LOGIN_USER") == null) {
                 throw new RuntimeException("로그인 해주세요.");
             }
 

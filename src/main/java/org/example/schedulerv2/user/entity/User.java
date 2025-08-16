@@ -3,8 +3,13 @@ package org.example.schedulerv2.user.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.example.schedulerv2.comment.entity.Comment;
 import org.example.schedulerv2.common.entity.BaseEntity;
 import org.example.schedulerv2.common.config.PasswordEncoder;
+import org.example.schedulerv2.schedule.entity.Schedule;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,6 +25,10 @@ public class User extends BaseEntity {
     private String email;
     @Column(nullable = false)
     private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Schedule> schedules = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;

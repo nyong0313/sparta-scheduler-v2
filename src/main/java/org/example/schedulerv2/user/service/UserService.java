@@ -58,7 +58,7 @@ public class UserService {
         User existingUser = findUserById(id);
         existingUser.isPasswordMatch(userRequestDto.getPassword(), passwordEncoder);
 
-        existingUser.updateUser(userRequestDto.getEmail(), userRequestDto.getEmail());
+        existingUser.updateUser(userRequestDto.getUsername(), userRequestDto.getEmail());
         User savedUser = userRepository.save(existingUser);
         return UserResponseDto.from(savedUser);
     }

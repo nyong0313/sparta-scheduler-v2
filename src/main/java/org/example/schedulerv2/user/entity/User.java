@@ -14,7 +14,7 @@ public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, unique = true, length = 10)
+    @Column(nullable = false, unique = true, length = 30)
     private String username;
     @Column(nullable = false, unique = true)
     private String email;
